@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import Web3 from 'web3';
 import logo from '../logo.png';
 import './App.css';
-import Color from '../abis/Color.json'
+import Ticket from '../abis/Ticket.json';
+import DragAndDrop from './DragandDrop';
 
 class App extends Component {
-
+  state = {
+    tickets: [],
+  }
+  
   async componentWillMount() {
     await this.loadWeb3()
     await this.loadBlockchainData()
@@ -32,33 +36,38 @@ class App extends Component {
 
 
     const networkId = await web3.eth.net.getId()
-    const networkData = Color.networks[networkId]
+    const networkData = Ticket.networks[networkId]
     if(networkData) {
-      const abi = Color.abi
+      const abi = Ticket.abi
       const address = networkData.address
       const contract = new web3.eth.Contract(abi, address)
       this.setState({ contract })
       const totalSupply = await contract.methods.totalSupply().call()
+      console.log(contract.methods)
       this.setState({ totalSupply })
-      // Load Colors
+      // Load tickets
       for (var i = 1; i <= totalSupply; i++) {
-        const color = await contract.methods.colors(i - 1).call()
-        this.setState({
-          colors: [...this.state.colors, color]
+        const ticket = await contract.methods.metadata(i - 1).call()
+        let ticketobj = new Object({name: ticket.name, artist: ticket.artist, location: ticket.location, price: ticket.price, seat: ticket.seat,date: ticket.date, ipfs_url: ticket.ipfs_url});
+        console.log(ticketobj);
+         this.setState({
+          tickets: [...this.state.tickets, ticketobj]
         })
+        console.log(this.state.tickets);
       }
-      console.log(this.state.colors)
+      console.log(this.state.tickets)
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
   }
 
-  mint = (color) => {
-    this.state.contract.methods.mint(color).send({ from: this.state.account })
+  mint = (ticket) => {
+    this.state.contract.methods.mint(ticket.name, ticket.location, ticket.artist, ticket.price, ticket.seat, ticket.date, ticket.ipfs_url).send({ from: this.state.account })
     .once('receipt', (receipt) => {
       this.setState({
-        colors: [...this.state.colors, color]
+        tickets: [...this.state.tickets, Object.assign(ticket.name, ticket.location, ticket.artist, ticket.price, ticket.seat, ticket.date, ticket.ipfs_url)]
       })
+      console.log(receipt);
     })
   }
   
@@ -68,7 +77,7 @@ class App extends Component {
       account: '',
       contract: null,
       totalSupply: 0,
-      colors: []
+      tickets: []
     }
   }
 
@@ -83,7 +92,7 @@ class App extends Component {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Color Tokens
+            Ticket Tokens
           </a>
           <ul className="navbar-nav px-3">
             <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
@@ -95,22 +104,76 @@ class App extends Component {
           <div className="row">
             <main role="main" className="col-lg-12 d-flex text-center">
               <div className="content mr-auto ml-auto">
-                <h1>Issue Token</h1>
+                <h1>Issue Ticket Token</h1>
                   <form onSubmit={(event) => {
                     event.preventDefault()
-                    const color = this.color.value
-                    this.mint(color)
+                    const ticket = {
+                      name: this.name.value,
+                      location: this.location.value,
+                      artist: this.artist.value,
+                      price: this.price.value,
+                      seat: this.seat.value,
+                      date: this.date.value,
+                      ipfs_url: this.image.value
+                    }
+                    this.mint(ticket)
                   }}>
                     <input
                       type='text'
                       className='form-control mb-1'
-                      placeholder='e.g. #FFFFFF'
-                      ref={(input) => { this.color = input }}
+                      placeholder='Name'
+                      ref={(input) => { this.name = input }}
                     />
+                    <input
+                      type='text'
+                      className='form-control mb-1'
+                      placeholder='Location'
+                      ref={(input) => { this.location = input }}
+                    />
+                    <input
+                      type='text'
+                      className='form-control mb-1'
+                      placeholder='Artist'
+                      ref={(input) => { this.artist = input }}
+                    />
+                    <input
+                      type='text'
+                      className='form-control mb-1'
+                      placeholder='Price in Fiat ($/€)'
+                      ref={(input) => { this.price = input }}
+                    />
+                    <input
+                      type='text'
+                      className='form-control mb-1'
+                      placeholder='Seat'
+                      ref={(input) => { this.seat = input }}
+                    />
+                    <input
+                      type='text'
+                      className='form-control mb-1'
+                      placeholder='Date in Format DD/MM/YYYY'
+                      ref={(input) => { this.date = input }}
+                    />
+                    <input
+                      type='text'
+                      className='form-control mb-1'
+                      placeholder='Image'
+                      ref={(input) => { this.image = input }}
+                    />
+
+                    <DragAndDrop  handleDrop={console.log("file dropped")}>
+                    <div style={{height: 150, width: 325, borderRadius: 1, borderWidth: 1, borderColor: 'grey', borderStyle: 'dotted'}}>
+                      <div>
+                        DROP EVENT COVER HERE.
+                      </div>
+                    </div>
+                  
+                    </DragAndDrop>
                     <input
                       type='submit'
                       className='btn btn-block btn-primary'
-                      value='MINT'
+                      value='CREATE TICKET-NFT'
+                      style={{marginTop:20}}
                     />
                   </form>
               </div>
@@ -118,14 +181,20 @@ class App extends Component {
           </div>
           <hr/>
           <div className="row text-center">
-            { this.state.colors.map((color, key) => {
+           {this.state.tickets.map((ticket) => {
               return(
-                <div key={key} className="col-md-3 mb-3">
-                  <div className="token" style={{ backgroundColor: color }}></div>
-                  <div>{color}</div>
+                <div className="col-md-3 mb-3">
+                <div className="token" style={{ backgroundticket: ticket }}></div>
+                  <div><img src={'https://gateway.pinata.cloud/ipfs/'+ ticket.ipfs_url} alt="Image was not able to be loaded"></img></div>
+                  <div>Artist: {ticket.artist}</div>
+                  <div>Event: {ticket.name}</div>
+                  <div>Location: {ticket.location}</div>
+                  <div>Ticket price in €: {ticket.price}</div>
+                  <div>Seat: {ticket.seat}</div>
                 </div>
               )
             })}
+            
           </div>
         </div>
       </div>
