@@ -3,11 +3,13 @@ import Web3 from 'web3';
 import logo from '../logo.png';
 import './App.css';
 import Ticket from '../abis/Ticket.json';
-import DragAndDrop from './DragandDrop';
+import pinFileToIPFS from '../helpers/uploadFile';
+require('dotenv').config();
 
 class App extends Component {
   state = {
     tickets: [],
+    file: [],
   }
   
   async componentWillMount() {
@@ -48,26 +50,32 @@ class App extends Component {
       // Load tickets
       for (var i = 1; i <= totalSupply; i++) {
         const ticket = await contract.methods.metadata(i - 1).call()
-        let ticketobj = new Object({name: ticket.name, artist: ticket.artist, location: ticket.location, price: ticket.price, seat: ticket.seat,date: ticket.date, ipfs_url: ticket.ipfs_url});
+        console.log(ticket)
+        let ticketobj = new Object({name: ticket.name, artist: ticket.artist, location: ticket.location, price: ticket.price, seat: ticket.seat,date: ticket.date, ipfs_hash: ticket.ipfs_hash});
         console.log(ticketobj);
          this.setState({
           tickets: [...this.state.tickets, ticketobj]
         })
         console.log(this.state.tickets);
       }
-      console.log(this.state.tickets)
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
   }
 
   mint = (ticket) => {
-    this.state.contract.methods.mint(ticket.name, ticket.location, ticket.artist, ticket.price, ticket.seat, ticket.date, ticket.ipfs_url).send({ from: this.state.account })
+    this.state.contract.methods.mint(ticket.name, ticket.location, ticket.artist, ticket.price, ticket.seat, ticket.date, ticket.ipfs_hash).send({ from: this.state.account })
     .once('receipt', (receipt) => {
       this.setState({
-        tickets: [...this.state.tickets, Object.assign(ticket.name, ticket.location, ticket.artist, ticket.price, ticket.seat, ticket.date, ticket.ipfs_url)]
+        tickets: [...this.state.tickets, Object.assign(ticket.name, ticket.location, ticket.artist, ticket.price, ticket.seat, ticket.date, ticket.ipfs_hash)]
       })
       console.log(receipt);
+    })
+  }
+
+  handleChange = (event) => {
+    this.setState({
+      file: URL.createObjectURL(event.target.files[0])
     })
   }
   
@@ -77,10 +85,13 @@ class App extends Component {
       account: '',
       contract: null,
       totalSupply: 0,
-      tickets: []
+      tickets: [],
+      file: [],
     }
+    this.handleChange = this.handleChange.bind(this)
   }
-
+  
+  
 
   render() {
     return (
@@ -88,7 +99,6 @@ class App extends Component {
         <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
           <a
             className="navbar-brand col-sm-3 col-md-2 mr-0"
-            href="http://www.dappuniversity.com/bootcamp"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -107,6 +117,11 @@ class App extends Component {
                 <h1>Issue Ticket Token</h1>
                   <form onSubmit={(event) => {
                     event.preventDefault()
+                    pinFileToIPFS(this.state.file).then((hash) => {
+                    this.setState({
+                      ipfs_hash: hash
+                      });
+                    })
                     const ticket = {
                       name: this.name.value,
                       location: this.location.value,
@@ -114,8 +129,10 @@ class App extends Component {
                       price: this.price.value,
                       seat: this.seat.value,
                       date: this.date.value,
-                      ipfs_url: this.image.value
+                      ipfs_hash: this.state.ipfs_hash
                     }
+                    console.log(this.state.ipfs_hash)
+                    console.log(ticket)
                     this.mint(ticket)
                   }}>
                     <input
@@ -154,27 +171,27 @@ class App extends Component {
                       placeholder='Date in Format DD/MM/YYYY'
                       ref={(input) => { this.date = input }}
                     />
-                    <input
-                      type='text'
-                      className='form-control mb-1'
-                      placeholder='Image'
-                      ref={(input) => { this.image = input }}
-                    />
+                    <div>
+                    <input type="file" onChange={this.handleChange}/>
+                    <img src={this.state.file}/>
+                     </div>
 
-                    <DragAndDrop  handleDrop={console.log("file dropped")}>
+
+                     {/*  WIP
                     <div style={{height: 150, width: 325, borderRadius: 1, borderWidth: 1, borderColor: 'grey', borderStyle: 'dotted'}}>
                       <div>
                         DROP EVENT COVER HERE.
                       </div>
                     </div>
-                  
-                    </DragAndDrop>
+                    </DragAndDrop>*/}
+
                     <input
                       type='submit'
                       className='btn btn-block btn-primary'
                       value='CREATE TICKET-NFT'
                       style={{marginTop:20}}
-                    />
+                     />  
+                     
                   </form>
               </div>
             </main>
@@ -185,7 +202,7 @@ class App extends Component {
               return(
                 <div className="col-md-3 mb-3">
                 <div className="token" style={{ backgroundticket: ticket }}></div>
-                  <div><img src={'https://gateway.pinata.cloud/ipfs/'+ ticket.ipfs_url} alt="Image was not able to be loaded"></img></div>
+                  <div><img src={'https://gateway.pinata.cloud/ipfs/'+ ticket.ipfs_hash} alt="Image was not able to be loaded" style={{width: 200, height: 200}}></img></div>
                   <div>Artist: {ticket.artist}</div>
                   <div>Event: {ticket.name}</div>
                   <div>Location: {ticket.location}</div>

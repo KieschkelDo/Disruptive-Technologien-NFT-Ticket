@@ -1,15 +1,17 @@
 require('dotenv').config();
-const pinataApiKey = process.env.pinataApiKey; 
-const pinataSecretApiKey = process.env.pinataSecretApiKey; 
+const pinataApiKey ='522b6e9682b67784e11a'; //process.env.pinataApiKey; //
+const pinataSecretApiKey = '6d15739287b2ac35102c2a55c0d98116da1094ba80272f740336defe3696cdc5'; //process.env.pinataSecretApiKey; //
 const axios = require("axios");
-const fs = require("fs");
 const FormData = require("form-data");
 
 
-const pinFileToIPFS = async () => {
+async function pinFileToIPFS(file){
     const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
     let data = new FormData();
-    data.append("file", fs.createReadStream('./img/asap_rocky.jpeg'));
+    console.log(file)
+    let blob = await fetch(file).then(r => r.blob());
+    data.append("file",blob);
+    /*  data.append("file", fs.createReadStream(file));*/
     const res = await axios.post(url, data, {
         maxContentLength: "Infinity",
         headers: {
@@ -19,5 +21,7 @@ const pinFileToIPFS = async () => {
         },
     });
     console.log(res.data);
+    return res.data.IpfsHash;
 };
-pinFileToIPFS();
+
+export default pinFileToIPFS;
