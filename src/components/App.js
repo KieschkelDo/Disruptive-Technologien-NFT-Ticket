@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
+import Main from './Main.js';
+import CreateTicket from './CreateTicket.js';
+import ShowTicket from './ShowTicket.js';
+import UseTicket from './UseTicket.js';
+import Typography from '@material-ui/core/Typography';
 import Web3 from 'web3';
 import logo from '../logo.png';
 import './App.css';
-import Ticket from '../abis/Ticket.json';
-import pinFileToIPFS from '../helpers/uploadFile';
+
 require('dotenv').config();
 
 class App extends Component {
@@ -14,7 +19,6 @@ class App extends Component {
   
   async componentWillMount() {
     await this.loadWeb3()
-    await this.loadBlockchainData()
   }
 
   async loadWeb3() {
@@ -28,57 +32,7 @@ class App extends Component {
     else {
       window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
     }
-  }
-
-  async loadBlockchainData() {
-    const web3 = window.web3
-    // Load account
-    const accounts = await web3.eth.getAccounts()
-    this.setState({ account: accounts[0] })
-
-
-    const networkId = await web3.eth.net.getId()
-    const networkData = Ticket.networks[networkId]
-    if(networkData) {
-      const abi = Ticket.abi
-      const address = networkData.address
-      const contract = new web3.eth.Contract(abi, address)
-      this.setState({ contract })
-      const totalSupply = await contract.methods.totalSupply().call()
-      console.log(contract.methods)
-      this.setState({ totalSupply })
-      // Load tickets
-      for (var i = 1; i <= totalSupply; i++) {
-        const ticket = await contract.methods.metadata(i - 1).call()
-        console.log(ticket)
-        let ticketobj = new Object({name: ticket.name, artist: ticket.artist, location: ticket.location, price: ticket.price, seat: ticket.seat,date: ticket.date, ipfs_hash: ticket.ipfs_hash});
-        console.log(ticketobj);
-         this.setState({
-          tickets: [...this.state.tickets, ticketobj]
-        })
-        console.log(this.state.tickets);
-      }
-    } else {
-      window.alert('Smart contract not deployed to detected network.')
-    }
-  }
-
-  mint = (ticket) => {
-    this.state.contract.methods.mint(ticket.name, ticket.location, ticket.artist, ticket.price, ticket.seat, ticket.date, ticket.ipfs_hash).send({ from: this.state.account })
-    .once('receipt', (receipt) => {
-      this.setState({
-        tickets: [...this.state.tickets, Object.assign(ticket.name, ticket.location, ticket.artist, ticket.price, ticket.seat, ticket.date, ticket.ipfs_hash)]
-      })
-      console.log(receipt);
-    })
-  }
-
-  handleChange = (event) => {
-    this.setState({
-      file: URL.createObjectURL(event.target.files[0])
-    })
-  }
-  
+  }  
   constructor(props) {
     super(props)
     this.state = {
@@ -88,133 +42,40 @@ class App extends Component {
       tickets: [],
       file: [],
     }
-    this.handleChange = this.handleChange.bind(this)
-  }
-  
-  
+    //this.handleChange = this.handleChange.bind(this)
 
+  console.log(this.state.account)
+  }
   render() {
     return (
+      <Router>
       <div>
         <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-          <a
+          <Link to="/">
+          <a 
             className="navbar-brand col-sm-3 col-md-2 mr-0"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Ticket Tokens
+             <div style={{color: '#fff'}}>Ethertixx</div>
           </a>
+          </Link>
+          <Link to="/createTickets"><a>Create Tickets</a></Link>
+          <Link to="/myTickets"><a>My Tickets</a></Link>
+          <Link to="/useTicket"><a>Use Ticket</a></Link>
           <ul className="navbar-nav px-3">
             <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
               <small className="text-white"><span id="account">{this.state.account}</span></small>
             </li>
           </ul>
         </nav>
-        <div className="container-fluid mt-5">
-          <div className="row">
-            <main role="main" className="col-lg-12 d-flex text-center">
-              <div className="content mr-auto ml-auto">
-                <h1>Issue Ticket Token</h1>
-                  <form onSubmit={(event) => {
-                    event.preventDefault()
-                    pinFileToIPFS(this.state.file).then((hash) => {
-                    this.setState({
-                      ipfs_hash: hash
-                      });
-                    })
-                    const ticket = {
-                      name: this.name.value,
-                      location: this.location.value,
-                      artist: this.artist.value,
-                      price: this.price.value,
-                      seat: this.seat.value,
-                      date: this.date.value,
-                      ipfs_hash: this.state.ipfs_hash
-                    }
-                    console.log(this.state.ipfs_hash)
-                    console.log(ticket)
-                    this.mint(ticket)
-                  }}>
-                    <input
-                      type='text'
-                      className='form-control mb-1'
-                      placeholder='Name'
-                      ref={(input) => { this.name = input }}
-                    />
-                    <input
-                      type='text'
-                      className='form-control mb-1'
-                      placeholder='Location'
-                      ref={(input) => { this.location = input }}
-                    />
-                    <input
-                      type='text'
-                      className='form-control mb-1'
-                      placeholder='Artist'
-                      ref={(input) => { this.artist = input }}
-                    />
-                    <input
-                      type='text'
-                      className='form-control mb-1'
-                      placeholder='Price in Fiat ($/€)'
-                      ref={(input) => { this.price = input }}
-                    />
-                    <input
-                      type='text'
-                      className='form-control mb-1'
-                      placeholder='Seat'
-                      ref={(input) => { this.seat = input }}
-                    />
-                    <input
-                      type='text'
-                      className='form-control mb-1'
-                      placeholder='Date in Format DD/MM/YYYY'
-                      ref={(input) => { this.date = input }}
-                    />
-                    <div>
-                    <input type="file" onChange={this.handleChange}/>
-                    <img src={this.state.file}/>
-                     </div>
-
-
-                     {/*  WIP
-                    <div style={{height: 150, width: 325, borderRadius: 1, borderWidth: 1, borderColor: 'grey', borderStyle: 'dotted'}}>
-                      <div>
-                        DROP EVENT COVER HERE.
-                      </div>
-                    </div>
-                    </DragAndDrop>*/}
-
-                    <input
-                      type='submit'
-                      className='btn btn-block btn-primary'
-                      value='CREATE TICKET-NFT'
-                      style={{marginTop:20}}
-                     />  
-                     
-                  </form>
-              </div>
-            </main>
-          </div>
-          <hr/>
-          <div className="row text-center">
-           {this.state.tickets.map((ticket) => {
-              return(
-                <div className="col-md-3 mb-3">
-                <div className="token" style={{ backgroundticket: ticket }}></div>
-                  <div><img src={'https://gateway.pinata.cloud/ipfs/'+ ticket.ipfs_hash} alt="Image was not able to be loaded" style={{width: 200, height: 200}}></img></div>
-                  <div>Artist: {ticket.artist}</div>
-                  <div>Event: {ticket.name}</div>
-                  <div>Location: {ticket.location}</div>
-                  <div>Ticket price in €: {ticket.price}</div>
-                  <div>Seat: {ticket.seat}</div>
-                </div>
-              )
-            })}
-            
-          </div>
-        </div>
+       
+      <Route path="/" exact><Main/></Route> 
+      <Route path="/useTicket"><UseTicket/></Route>
+      <Route path="/myTickets"><ShowTicket/></Route>
+      <Route path="/createTickets"><CreateTicket/></Route>
       </div>
+      </Router>
     );
   }
 }
