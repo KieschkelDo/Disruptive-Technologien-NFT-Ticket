@@ -94,10 +94,13 @@ class ShowTicket extends Component {
 
     render() {
         return (
+
             <div className="row text-center">
+                <div style={{border: '30px solid white'}}></div>
                 {this.state.tickets.map((ticket) => {
                     return (
                         <div className="col-md-3 mb-3">
+                            <div style={{border: '30px solid white'}}></div>
                             <RecipeReviewCard props={ticket}></RecipeReviewCard>
                         </div>
                     )
