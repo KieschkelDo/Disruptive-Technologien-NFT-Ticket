@@ -5,6 +5,7 @@ import CreateTicket from './CreateTicket.js';
 import ShowTicket from './ShowTicket.js';
 import UseTicket from './UseTicket.js';
 import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
 import Web3 from 'web3';
 import logo from '../logo.png';
 import './App.css';
@@ -48,8 +49,9 @@ class App extends Component {
   }
   render() {
     return (
+      <Container maxWidth="xl">
       <Router>
-      <div>
+      <div maxWidth="">
         <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
           <Link to="/">
           <a 
@@ -61,8 +63,8 @@ class App extends Component {
           </a>
           </Link>
           <Link to="/createTickets"><a>Create Tickets</a></Link>
-          <Link to="/myTickets"><a>My Tickets</a></Link>
-          <Link to="/useTicket"><a>Use Ticket</a></Link>
+          <Link to="/myTickets"><a>Tickets</a></Link>
+          <Link to="/useTicket"><a>Ticketroom</a></Link>
           <ul className="navbar-nav px-3">
             <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
               <small className="text-white"><span id="account">{this.state.account}</span></small>
@@ -76,6 +78,7 @@ class App extends Component {
       <Route path="/createTickets"><CreateTicket/></Route>
       </div>
       </Router>
+      </Container>
     );
   }
 }
