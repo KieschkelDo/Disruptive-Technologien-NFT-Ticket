@@ -56,6 +56,10 @@ class CreateTicket extends Component {
           file: URL.createObjectURL(event.target.files[0])
         })
       }
+
+      async componentWillMount() {
+        await this.loadBlockchainData()
+      }
       
       constructor(props) {
         super(props)
