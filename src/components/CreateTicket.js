@@ -14,7 +14,6 @@ class CreateTicket extends Component {
         const accounts = await web3.eth.getAccounts()
         this.setState({ account: accounts[0] })
     
-    
         const networkId = await web3.eth.net.getId()
         const networkData = Ticket.networks[networkId]
         if(networkData) {
@@ -56,6 +55,7 @@ class CreateTicket extends Component {
           file: URL.createObjectURL(event.target.files[0])
         })
       }
+
       async componentWillMount() {
         await this.loadBlockchainData()
       }

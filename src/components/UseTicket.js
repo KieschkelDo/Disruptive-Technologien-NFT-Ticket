@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from "prop-types";
+import { withRouter } from "react-router";
 import RecipeReviewCard from './Card.js';
 import Web3 from 'web3';
 import Ticket from '../abis/Ticket.json';
@@ -12,20 +14,28 @@ const mainFeaturedPost = {
     imgText: 'main image description',
   };
 
-class UseTicket extends Component {
+class UseTicket extends React.Component {
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+      }
     
     render() {
+        const { match, location, history } = this.props;
+        if (this.props.location.state == undefined){
+            alert("No Ticket selected");
+            return <div></div>
+        }
+
+        const ticket = this.props.location.state.ticket;
         return (
             <div>
                 <div style={{border: '22px solid white'}}></div>
-                <MainFeaturedPost post={mainFeaturedPost} />
-                test
-                test
-                test
-                test
+                <MainFeaturedPost ticket={ticket}/>
             </div>
         );
     }
 }
 
-export default UseTicket;
+export default withRouter(UseTicket);

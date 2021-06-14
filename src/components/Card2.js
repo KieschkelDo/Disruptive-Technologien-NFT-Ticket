@@ -5,9 +5,10 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
+import Barcode from 'react-barcode';
 
 const useStyles = makeStyles((theme) => ({
-  mainFeaturedPost: {
+  mainFeaturedTicket: {
     position: 'relative',
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     backgroundColor: 'rgba(0,0,0,.3)',
   },
-  mainFeaturedPostContent: {
+  mainFeaturedTicketContent: {
     position: 'relative',
     padding: theme.spacing(3),
     [theme.breakpoints.up('md')]: {
@@ -35,24 +36,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MainFeaturedPost(props) {
+export default function MainFeaturedTicket(props) {
   const classes = useStyles();
-  const { post } = props;
+  console.log(props.ticket)
+  
 
   return (
-    <Paper className={classes.mainFeaturedPost} style={{ backgroundImage: `url(${post.image})` }}>
+    <Paper className={classes.mainFeaturedTicket} style={{ backgroundImage: `url(https://source.unsplash.com/random)` }}>
       {/* Increase the priority of the hero background image */}
-      {<img style={{ display: 'none' }} src={post.image} alt={post.imageText} />}
+      {<img style={{ display: 'none' }} src={`url(https://source.unsplash.com/random)`} alt={"asdasd"} />}
       <div className={classes.overlay} />
       <Grid container>
         <Grid item md={6}>
-          <div className={classes.mainFeaturedPostContent}>
+          <div className={classes.mainFeaturedTicketContent}>
             <Typography component="h1" variant="h3" color="inherit" gutterBottom>
-              {post.title}
+            {props.ticket.name} 
             </Typography>
             <Typography variant="h5" color="inherit" paragraph>
-              {post.description}
+               {props.ticket.artist} 
             </Typography>
+            <Typography variant="h5" color="inherit" paragraph>
+            {props.ticket.location} 
+            </Typography>
+            <Typography variant="h5" color="inherit" paragraph>
+               {props.ticket.seat} 
+               </Typography>
+               <Typography variant="h5" color="inherit" paragraph>
+               {props.ticket.price} 
+               </Typography>
+               <Barcode value={Math.random().toString(36).substring(2)}/>
           </div>
         </Grid>
       </Grid>
@@ -60,6 +72,6 @@ export default function MainFeaturedPost(props) {
   );
 }
 
-MainFeaturedPost.propTypes = {
-  post: PropTypes.object,
+MainFeaturedTicket.propTypes = {
+  ticket: PropTypes.object,
 };
