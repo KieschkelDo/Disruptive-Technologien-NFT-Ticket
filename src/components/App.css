@@ -26,3 +26,11 @@
   .Countdown-col-element strong{
     font-size: 50px;
   }
+
+  .footer{
+    position:absolute;
+    left:0;
+    bottom:0;
+    right:0;
+  }
+  

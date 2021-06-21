@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Web3 from 'web3';
+import Ticket from '../abis/Ticket.json';
 
 class Shop extends Component {
     state = {

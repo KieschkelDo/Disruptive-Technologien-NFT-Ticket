@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Barcode from 'react-barcode';
+import EventIcon from '@material-ui/icons/Event';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 const useStyles = makeStyles((theme) => ({
   mainFeaturedTicket: {
@@ -42,29 +44,31 @@ export default function MainFeaturedTicket(props) {
   
 
   return (
-    <Paper className={classes.mainFeaturedTicket} style={{ backgroundImage: `url(https://source.unsplash.com/random)` }}>
+    <Paper className={classes.mainFeaturedTicket} style={{ backgroundImage: `url(https://www.eventim.de/obj/media/DE-eventim/teaser/artworks/2021/the-weeknd-tickets-artwork.jpg)` }}>
       {/* Increase the priority of the hero background image */}
-      {<img style={{ display: 'none' }} src={`url(https://source.unsplash.com/random)`} alt={"asdasd"} />}
+      {<img style={{ display: 'none' }} src={`url(https://www.eventim.de/obj/media/DE-eventim/teaser/artworks/2021/the-weeknd-tickets-artwork.jpg)`} alt={"asdasd"} />}
       <div className={classes.overlay} />
       <Grid container>
         <Grid item md={6}>
           <div className={classes.mainFeaturedTicketContent}>
-            <Typography component="h1" variant="h3" color="inherit" gutterBottom>
-            {props.ticket.name} 
+            <Typography variant="h3" color="inherit" gutterBottom>
+               {props.ticket.name} 
             </Typography>
             <Typography variant="h5" color="inherit" paragraph>
-               {props.ticket.artist} 
+               Artist: {props.ticket.artist} 
             </Typography>
             <Typography variant="h5" color="inherit" paragraph>
-            {props.ticket.location} 
+               Seat:  {props.ticket.seat} 
             </Typography>
             <Typography variant="h5" color="inherit" paragraph>
-               {props.ticket.seat} 
-               </Typography>
-               <Typography variant="h5" color="inherit" paragraph>
-               {props.ticket.price} 
-               </Typography>
-               <Barcode value={Math.random().toString(36).substring(2)}/>
+              <LocationOnIcon/> {props.ticket.location} 
+            </Typography>
+            <Typography variant="h5" color="inherit" paragraph>
+            <EventIcon/> {props.ticket.date} 
+            </Typography>        
+            <div style={{ }}>
+            <Barcode value={Math.random().toString(36).substring(2)}/>
+            </div>
           </div>
         </Grid>
       </Grid>

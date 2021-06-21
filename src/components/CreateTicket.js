@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Ticket from '../abis/Ticket.json';
 import pinFileToIPFS from '../helpers/uploadFile';
+import Footer from './footer.js'
 
 class CreateTicket extends Component {
     state = {
@@ -153,10 +154,15 @@ class CreateTicket extends Component {
                       style={{marginTop:20}}
                      />  
                   </form>
+                  
               </div>
             </main>
+            <div className="footer">
+              <Footer title="About" description="Disruptive Technologien NFT-Ticketing" ></Footer>
+              </div>
           </div>
             </div>
+        
         );
     }
 }
