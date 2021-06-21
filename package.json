@@ -24,6 +24,7 @@
     "fs": "0.0.1-security",
     "moment": "^2.29.1",
     "react": "16.8.4",
+    "react-barcode": "^1.4.0",
     "react-bootstrap": "1.0.0-beta.5",
     "react-dom": "16.8.4",
     "react-instagram-embed": "^2.0.0",

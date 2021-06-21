@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
+import {BrowserRouter as Router, Switch, Route, Link, useLocation} from "react-router-dom";
 import Main from './Main.js';
 import CreateTicket from './CreateTicket.js';
 import ShowTicket from './ShowTicket.js';
 import UseTicket from './UseTicket.js';
+import Shop from './Shop.js'
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Web3 from 'web3';
@@ -16,12 +17,9 @@ class App extends Component {
   state = {
     tickets: [],
     file: [],
+    account: '',
   }
   
-  async componentWillMount() {
-    await this.loadWeb3()
-  }
-
   async loadWeb3() {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum)
@@ -34,6 +32,19 @@ class App extends Component {
       window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
     }
   }  
+
+  async loadAccountData(){
+    const web3 = window.web3
+        // Load account
+        const accounts = await web3.eth.getAccounts()
+        this.setState({ account: accounts[0] })
+  }
+
+  async componentWillMount() {
+    await this.loadWeb3()
+    await this.loadAccountData();
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -63,8 +74,9 @@ class App extends Component {
           </a>
           </Link>
           <Link to="/createTickets"><a>Create Tickets</a></Link>
+          <Link to="/Shop"><a>Shop</a></Link>
           <Link to="/myTickets"><a>Tickets</a></Link>
-          <Link to="/useTicket"><a>Ticketroom</a></Link>
+      
           <ul className="navbar-nav px-3">
             <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
               <small className="text-white"><span id="account">{this.state.account}</span></small>
@@ -73,10 +85,12 @@ class App extends Component {
         </nav>
        
       <Route path="/" exact><Main/></Route> 
+      <Route path="/Shop"><Shop/></Route>
       <Route path="/useTicket"><UseTicket/></Route>
       <Route path="/myTickets"><ShowTicket/></Route>
       <Route path="/createTickets"><CreateTicket/></Route>
       </div>
+
       </Router>
       </Container>
     );

@@ -74,7 +74,7 @@ export default function RecipeReviewCard({props}) {
           </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="ticket" component={Link} to={'/useTicket'}>
+        <IconButton aria-label="ticket" component={Link} to={{pathname:'/useTicket', state: { ticket: props}}}>
           <ConfirmationNumberIcon/>
         </IconButton>
         <IconButton

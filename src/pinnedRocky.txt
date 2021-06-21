@@ -1,5 +1,0 @@
-{
-  IpfsHash: 'Qmd8p7vNzwXxGEAEESM2zzzbmZFgXNWdMiqhy3uPEvkHDe',
-  PinSize: 11480,
-  Timestamp: '2021-04-25T16:52:10.969Z'
-}
