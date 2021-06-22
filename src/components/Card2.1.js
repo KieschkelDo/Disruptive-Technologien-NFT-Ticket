@@ -8,7 +8,6 @@ import Link from '@material-ui/core/Link';
 import Barcode from 'react-barcode';
 import EventIcon from '@material-ui/icons/Event';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import QR from '../img/QR.PNG';
 
 const useStyles = makeStyles((theme) => ({
   mainFeaturedTicket: {
@@ -44,7 +43,7 @@ export default function MainFeaturedTicket(props) {
   
 
   return (
-    <Paper className={classes.mainFeaturedTicket} style={{ backgroundImage: `url(https://i.imgur.com/dreQyVe.png)` }} >
+    <Paper className={classes.mainFeaturedTicket} style={{ backgroundImage: `url(https://i.imgur.com/bCkoR0q.png)` }} >
       {/* Increase the priority of the hero background image */}
       {<img style={{ display: 'none' }} src={`url(https://www.eventim.de/obj/media/DE-eventim/teaser/artworks/2021/the-weeknd-tickets-artwork.jpg)`} alt={"asdasd"} />}
       <div className={classes.overlay} />
@@ -67,7 +66,7 @@ export default function MainFeaturedTicket(props) {
             <EventIcon/> {props.ticket.date} 
             </Typography>        
             <div style={{ }}>
-            <img src={QR} height='150px'></img>
+            <Barcode value={Math.random().toString(36).substring(2)}/>
             </div>
           </div>
         </Grid>

@@ -133,7 +133,7 @@ class CreateTicket extends Component {
                     <input
                       type='text'
                       className='form-control mb-1'
-                      placeholder='Date in Format DD/MM/YYYY'
+                      placeholder='Date in Format DD/MM/YYYY - HH:MM'
                       ref={(input) => { this.date = input }}
                     />
                     <div>

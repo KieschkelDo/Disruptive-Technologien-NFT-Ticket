@@ -4,12 +4,12 @@ import { withRouter } from "react-router";
 import MediaCard from './MediaCard.js';
 import Web3 from 'web3';
 import Ticket from '../abis/Ticket.json';
-import MainFeaturedPost from './Card2.js'
+import MainFeaturedPost from './Card2.1.js'
 import Typography from '@material-ui/core/Typography';
 import Countdown from './Countdown2.js'
 import test from '../img/test.gif';
 import test2 from '../img/Test.PNG'
-import logo_wknd from '../img/Logo_Wknd.png'
+import logo_wknd from '../img/Dua_Lipa1.png'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -57,7 +57,7 @@ class UseTicket extends React.Component {
                 <div style={{width:'800px', margin:'0 auto'}}>
                     <Typography variant="h5" align="center" color="textSecondary" paragraph>
                         Welcome to your personal Ticketroom! 
-                        This is a space that gathers all of your anticipation and memories of the event. 
+                        This is a space that gathers all of your memories of the event. 
                         Everything in this space is connected to your Ticket-Token only and can only be accesed as long as 
                         the Ticket-Token is connected to your wallet. Enjoy!
                         <img src={logo_wknd}></img>
