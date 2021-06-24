@@ -7,9 +7,9 @@ import Ticket from '../abis/Ticket.json';
 import MainFeaturedPost from './Card2.js'
 import Typography from '@material-ui/core/Typography';
 import Countdown from './Countdown2.js'
-import test from '../img/test.gif';
-import test2 from '../img/Test.PNG'
-import logo_wknd from '../img/Logo_Wknd.png'
+import test from '../img/wknd/test.gif';
+import test2 from '../img/wknd/Test.PNG'
+import logo_wknd from '../img/wknd/Logo_Wknd.png'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';

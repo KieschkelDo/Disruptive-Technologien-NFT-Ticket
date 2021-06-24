@@ -16,11 +16,11 @@ const useStyles = makeStyles({
     maxWidth: 500,
   },
   media: {
-    height: 300,
+    height: 500,
   },
 });
 
-export default function MediaCard() {
+export default function MediaCard(props) {
   const classes = useStyles();
 
   return (
@@ -28,9 +28,8 @@ export default function MediaCard() {
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image="https://www.swp.de/imgs/07/7/9/9/3/6/5/2/3/tok_4d38eba1aed48e3aa29b51711bb20f30/w1200_h675_x942_y257_eacd06790b0f3705.jpeg"
-          title="Contemplative Reptile"
-        />
+          image={props.img}
+          title="Media Card"/>
       </CardActionArea>
       <CardActions>
         <Button size="small" >

@@ -8,7 +8,7 @@ import Link from '@material-ui/core/Link';
 import Barcode from 'react-barcode';
 import EventIcon from '@material-ui/icons/Event';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import QR from '../img/QR.PNG';
+import QR from '../img/wknd/QR.PNG';
 
 const useStyles = makeStyles((theme) => ({
   mainFeaturedTicket: {

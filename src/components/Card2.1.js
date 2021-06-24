@@ -8,6 +8,7 @@ import Link from '@material-ui/core/Link';
 import Barcode from 'react-barcode';
 import EventIcon from '@material-ui/icons/Event';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import QR2 from '../img/dua/QR_2.PNG';
 
 const useStyles = makeStyles((theme) => ({
   mainFeaturedTicket: {
@@ -66,7 +67,7 @@ export default function MainFeaturedTicket(props) {
             <EventIcon/> {props.ticket.date} 
             </Typography>        
             <div style={{ }}>
-            <Barcode value={Math.random().toString(36).substring(2)}/>
+            <img src={QR2} height='150px'></img>
             </div>
           </div>
         </Grid>
