@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Switch, Route, Link, useLocation} from "react-r
 import Main from './Main.js';
 import CreateTicket from './CreateTicket.js';
 import ShowTicket from './ShowTicket.js';
-import UseTicket from './UseTicket.js';
+import UseTicket from './UseTicket2';
 import Shop from './Shop.js'
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -76,7 +76,6 @@ class App extends Component {
           <Link to="/createTickets"><a>Create Tickets</a></Link>
           <Link to="/Shop"><a>Shop</a></Link>
           <Link to="/myTickets"><a>Tickets</a></Link>
-          <Link to="/useTicket"><a>Ticketroom</a></Link>
       
           <ul className="navbar-nav px-3">
             <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
@@ -91,6 +90,7 @@ class App extends Component {
       <Route path="/myTickets"><ShowTicket/></Route>
       <Route path="/createTickets"><CreateTicket/></Route>
       </div>
+
       </Router>
       </Container>
     );
