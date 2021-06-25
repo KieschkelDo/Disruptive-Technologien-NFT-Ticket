@@ -27,4 +27,4 @@ yarn-error.log*
 # truffle
 
 /src/abis
-/ganache
+/ganache_db
