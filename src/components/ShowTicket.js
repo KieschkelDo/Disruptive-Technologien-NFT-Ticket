@@ -3,6 +3,7 @@ import RecipeReviewCard from './Card.js';
 import Web3 from 'web3';
 import Ticket from '../abis/Ticket.json';
 import Typography from '@material-ui/core/Typography';
+import Grid, { GridSpacing } from '@material-ui/core/Grid';
 
 class ShowTicket extends Component {
     state = {
@@ -98,10 +99,17 @@ class ShowTicket extends Component {
                  {/* Show all Tickets available to purchase */}
                 {this.state.tickets.map((ticket) => {
                     return (
-                        <div className="col-md-3 mb-3">
-                            <div style={{border: '30px solid white'}}></div>
-                            <RecipeReviewCard props={ticket}></RecipeReviewCard>
-                        </div>
+                        <Grid container 
+                        direction="row"
+                        justify="center"
+                        alignItems="space-between">
+                            <Grid item xs>
+                                <div className="col-md-3 mb-3">
+                                    <div style={{border: '30px solid white'}}></div>
+                                    <RecipeReviewCard props={ticket}></RecipeReviewCard>
+                                </div>
+                            </Grid>
+                        </Grid>
                     )
                 })}
             </div>   
@@ -113,11 +121,17 @@ class ShowTicket extends Component {
                 {this.state.ticketsforowner.map((ticket) => {
                     return (
                        
-                        <div className="col-md-3 mb-3">
-                            <div style={{border: '30px solid white'}}></div>
-                            <RecipeReviewCard props={ticket}></RecipeReviewCard>
-                        </div>      
-                    )
+                        <Grid container 
+                        direction="row"
+                        justify="center"
+                        alignItems="flex-start">
+                            <Grid item xs>
+                            <div className="col-md-3 mb-3">
+                                <div style={{border: '30px solid white'}}></div>
+                                <RecipeReviewCard props={ticket}></RecipeReviewCard>
+                            </div>      
+                            </Grid>
+                        </Grid>                    )
                 })}
             </div>
             </div>
