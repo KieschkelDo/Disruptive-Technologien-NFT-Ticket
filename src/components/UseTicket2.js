@@ -23,9 +23,15 @@ import DuaFan4 from '../img/dua/DuaFan4.jpg';
 import DuaFan5 from '../img/dua/DuaFan5.jpg';
 import DuaFan6 from '../img/dua/DuaFan6.png';
 import DuaFan7 from '../img/dua/DuaFan7.jpg';
-import DuaSocial from '../img/dua/Dua_Social.PNG'
-import DuaSocial2 from '../img/dua/Dua_Social2.PNG'
-import logo_dua from '../img/dua/Dua_Lipa1.png'
+import DuaSocial from '../img/dua/Dua_Social.PNG';
+import DuaSocial2 from '../img/dua/Dua_Social2.PNG';
+import DuaSocial3 from '../img/dua/Dua_Social3.PNG';
+import DuaSocial4 from '../img/dua/Dua_Social4.PNG';
+import DuaSocial5 from '../img/dua/Dua_Social5.PNG';
+import DuaSocial6 from '../img/dua/Dua_Social6.PNG';
+import DuaSocial7 from '../img/dua/Dua_Social7.PNG';
+import logo_dua from '../img/dua/Dua_Lipa1.png';
+import White from '../img/White.PNG';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -120,7 +126,18 @@ class UseTicket extends React.Component {
 
                 <div style={{border: '22px solid white'}}>
                     <img src={DuaSocial} alt="Instagram Dua Lipa" style={{border: "20px solid white"}}/>
+                    <img src={White} alt="White" style={{border: "20px solid white", width: '22%'}}/>
+                    <img src={DuaSocial3} alt="Instagram Dua Lipa" style={{border: "10px solid white", width: '28%'}}/>
+                    
+                    <img src={DuaSocial4} alt="Instagram Dua Lipa" style={{border: "10px solid white"}}/>
+                    <img src={DuaSocial5} alt="Instagram Dua Lipa" style={{border: "10px solid white"}}/>
+                    <img src={DuaSocial6} alt="Instagram Dua Lipa" style={{border: "10px solid white"}}/>
+
+
+                    <img src={DuaSocial7} alt="Instagram Dua Lipa" style={{border: "10px solid white", width: '28%'}}/>
+                    <img src={White} alt="White" style={{border: "20px solid white"}}/>
                     <img src={DuaSocial2} alt="Instagram Dua Lipa" style={{border: "10px solid white"}}/>
+                    
                 </div>   
 
                 <hr></hr>

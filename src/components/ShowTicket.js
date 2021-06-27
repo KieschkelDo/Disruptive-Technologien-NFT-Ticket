@@ -3,6 +3,7 @@ import RecipeReviewCard from './Card.js';
 import Web3 from 'web3';
 import Ticket from '../abis/Ticket.json';
 import Typography from '@material-ui/core/Typography';
+import Grid, { GridSpacing } from '@material-ui/core/Grid';
 
 class ShowTicket extends Component {
     state = {
