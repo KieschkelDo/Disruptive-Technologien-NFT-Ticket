@@ -11,10 +11,11 @@ import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
+import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
 import UseTicket from './UseTicket.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RecipeReviewCard({props}) {
+export default function RecipeReviewCard({props,isshop,transferTicket, sellTicket}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const handleExpandClick = () => {
@@ -74,9 +75,22 @@ export default function RecipeReviewCard({props}) {
           </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="ticket" component={Link} to={{pathname:'/useTicket', state: { ticket: props}}}>
-          <ConfirmationNumberIcon/>
-        </IconButton>
+        {isshop ?
+          <IconButton onClick={() => transferTicket(props.id)}>
+            <ShoppingCartIcon />
+          </IconButton>
+          :
+          <div>
+          <IconButton aria-label="ticket" component={Link} to={{ pathname: '/useTicket', state: { ticket: props } }}>
+            <ConfirmationNumberIcon/>
+          </IconButton> 
+          <IconButton aria-label="sell" onClick={() => sellTicket(props.id)}>
+          <TransferWithinAStationIcon/>
+           </IconButton>
+           </div>
+        }
+
+        
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,

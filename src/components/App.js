@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Switch, Route, Link, useLocation} from "react-r
 import Main from './Main.js';
 import CreateTicket from './CreateTicket.js';
 import ShowTicket from './ShowTicket.js';
-import UseTicket from './UseTicket2';
+import UseTicket from './UseTicket';
 import Shop from './Shop.js'
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';

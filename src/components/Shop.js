@@ -11,7 +11,14 @@ class Shop extends Component {
         tickets: [],
         ownedtickets: [],
         account: '',
-        availabletickets: []
+        availabletickets: [],
+        selectedticket: [],
+        isshop: true
+    }
+
+    constructor(props){
+      super(props);
+      this.transferTicket = this.transferTicket.bind(this)
     }
     
     async loadWeb3() {
@@ -32,6 +39,7 @@ class Shop extends Component {
         // Load account
         const accounts = await web3.eth.getAccounts()
         this.setState({ account: accounts[0] })
+        
 
         const networkId = await web3.eth.net.getId()
         const networkData = Ticket.networks[networkId]
@@ -58,7 +66,7 @@ class Shop extends Component {
       }
 
       async getTicketsofOwner(){
-        const web3 = window.web3
+        const web3 = window.web3;
         // Load account
         const accounts = await web3.eth.getAccounts()
         this.setState({ account: accounts[0] })
@@ -75,7 +83,7 @@ class Shop extends Component {
             const tokenid = await contract.methods.tokenOfOwnerByIndex(accounts[0], i).call()
             const ticket = await contract.methods.getTicketMetadata(tokenid).call()
            // console.log(ticket);
-            let ownedticketobj = new Object({name: ticket.name, artist: ticket.artist, location: ticket.location, price: ticket.price, seat: ticket.seat,date: ticket.date, ipfs_hash: ticket.ipfs_hash,})
+            let ownedticketobj = new Object({id: ticket.id, name: ticket.name, artist: ticket.artist, location: ticket.location, price: ticket.price, seat: ticket.seat,date: ticket.date, ipfs_hash: ticket.ipfs_hash,})
             this.setState({
               ownedtickets: [...this.state.ownedtickets, ownedticketobj]
             })
@@ -96,28 +104,50 @@ class Shop extends Component {
       }
     
 
-      async transferTicket (ticketid, from, to) {
-        const web3 = window.web3
-       
+      async transferTicket(ticketid) {
+        const web3 = window.web3;
+        const accounts = await web3.eth.getAccounts();
+        this.setState({ account: accounts[0] });
+        console.log(this.state.account)
+
         const networkId = await web3.eth.net.getId()
         const networkData = Ticket.networks[networkId]
-
+        
         if(networkData) {
+          //pass ticketid to function via on-click event
           const abi = Ticket.abi
           const address = networkData.address
           const contract = new web3.eth.Contract(abi, address)
           this.setState({ contract })
-          //transferFrom needs a from address
-          const transfer = await contract.methods.transferFrom(ticketid, from, to)
+
+          //get the owner address via the tokenid, also verifies if ticketowner is correct
+          var from = await contract.methods.ownerOf(Number(ticketid)).call()
+          console.info(from)
+     
+          //Account that requests the transfer of the token and will recieve the token
+          var to = this.state.account
+          console.info(to)
+          
+          let isapproved = await contract.methods.isApprovedForAll(from, to).call();
+          console.log(isapproved)
+          
+          //actual Transfer taking place
+          const transfer = await contract.methods.transferFrom(from, to, Number(ticketid)).send({from: this.state.account})
+          console.log(transfer)
+          
         }
+
+        //from should be current owner of ticket
+        //ticketid should be selected ticket
+        //
       }
+
 
       async componentWillMount() {
         await this.loadWeb3()
         await this.allTickets();
         await this.getTicketsofOwner();
-        await this.availableTickets();
-        
+        await this.availableTickets(); 
       }
 
     render() {
@@ -130,11 +160,12 @@ class Shop extends Component {
     
                 <div style={{border: '30px solid white'}}></div>
                 {this.state.availabletickets.map((ticket) => {
+                  console.log(ticket);
                     return (
                        
                         <div className="col-md-3 mb-3">
                             <div style={{border: '30px solid white'}}></div>
-                            <RecipeReviewCard props={ticket}></RecipeReviewCard>
+                            <RecipeReviewCard props={ticket} isshop={this.state.isshop} transferTicket={this.transferTicket}></RecipeReviewCard>
                         </div>      
                     )
                 })}
