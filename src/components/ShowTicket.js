@@ -115,7 +115,7 @@ class ShowTicket extends Component {
           //Set Authorization for Account to handle the transfer
           //allacounts[]
         
-          let setapproval = await contract.methods.setApprovalForAll('0xFFcf8FDEE72ac11b5c542428B35EEF5769C409f0', true).send({from: this.state.account}).once('error', (error) => {
+          let setapproval = await contract.methods.setApprovalForAll('0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', true).send({from: this.state.account}).once('error', (error) => {
             console.log(error)
           });
           console.log(setapproval)
