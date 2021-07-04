@@ -99,11 +99,10 @@ class Shop extends Component {
         //total supply - owned tickets
         let totalSupply = this.state.tickets
         let ownedTickets = this.state.ownedtickets
-        const availabletickets = differenceBy(totalSupply, ownedTickets, 'date')
+        const availabletickets = differenceBy(totalSupply, ownedTickets, 'date');
         this.setState({ availabletickets })
       }
     
-
       async transferTicket(ticketid) {
         const web3 = window.web3;
         const accounts = await web3.eth.getAccounts();
@@ -155,14 +154,13 @@ class Shop extends Component {
         return (
             <div>
                 <h5 style={{marginTop:"50px"}}>All Tickets available to purchase:</h5>
-            <div className="row text-center">
+            <div className="row text-center row-eq-height">
                 {/* Show Tickets for User */}
     
                 <div style={{border: '30px solid white'}}></div>
                 {this.state.availabletickets.map((ticket) => {
-                  console.log(ticket);
+                  console.log(ticket.id.toNumber());
                     return (
-                       
                         <div className="col-md-3 mb-3">
                             <div style={{border: '30px solid white'}}></div>
                             <RecipeReviewCard props={ticket} isshop={this.state.isshop} transferTicket={this.transferTicket}></RecipeReviewCard>

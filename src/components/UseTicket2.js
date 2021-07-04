@@ -56,9 +56,7 @@ class UseTicket extends React.Component {
       }
     
     render() {
-    const currentDate = new Date();
-    const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
-        
+
     const { match, location, history } = this.props;
         if (this.props.location.state == undefined){
             alert("No Ticket selected");
@@ -66,13 +64,15 @@ class UseTicket extends React.Component {
         }
 
         const ticket = this.props.location.state.ticket;
+        var dmy = ticket.date.split("/");
+        var dateformat = new Date(dmy[2], dmy[1] - 1, dmy[0]);
         return (
             <div>          
                 <div style={{border: '22px solid white'}}></div>
                 <MainFeaturedPost ticket={ticket}/>
                 
                 <div style={{border: '1px solid gainsboro', textAlign: 'center'}}>
-                <Countdown date={`${year}-12-24T00:00:00`} style={{
+                <Countdown date={`${dmy[2]}-${dmy[1]}-${dmy[0]}T00:00:00`} style={{
                     display: "flex"}}/>
                 </div>
 

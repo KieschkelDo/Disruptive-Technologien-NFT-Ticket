@@ -5,12 +5,15 @@ import Ticket from '../abis/Ticket.json';
 import Typography from '@material-ui/core/Typography';
 import Grid, { GridSpacing } from '@material-ui/core/Grid';
 
+/*import { Item } from 'react-bootstrap/lib/Breadcrumb';*/
+
 class ShowTicket extends Component {
     state = {
         tickets: [],
         ownedtickets: [],
         isshop: false,
-        account: ''
+        account: '',
+        allaccounts: '',
     }
 
     constructor(props){
@@ -86,13 +89,16 @@ class ShowTicket extends Component {
           }
          else {
           window.alert('Smart contract not deployed to detected network.')
-        } 
+        }
       }
 
       async sellTicket(){
         const web3 = window.web3;
-        const accounts = await web3.eth.getAccounts();
+        await window.ethereum.enable()
+        const accounts = await web3.eth.requestAccounts();
+        console.log(accounts);
         this.setState({ account: accounts[0] });
+        this.setState({ allaccounts: accounts})
 
         const networkId = await web3.eth.net.getId()
         const networkData = Ticket.networks[networkId]
@@ -107,20 +113,21 @@ class ShowTicket extends Component {
           //get the owner address via the tokenid, also verifies if ticketowner is correct
           //this needs to be changed to allow for dynamic loader of approval
           //Set Authorization for Account to handle the transfer
+          //allacounts[]
+        
           let setapproval = await contract.methods.setApprovalForAll('0xFFcf8FDEE72ac11b5c542428B35EEF5769C409f0', true).send({from: this.state.account}).once('error', (error) => {
             console.log(error)
           });
           console.log(setapproval)
-          
+           
           /*
-          
           //let approve = await contract.methods.approve(to, Number(ticketid)).call()
           let approve = await contract.methods.approve(to, Number(ticketid)).send({from: message_from}).once('reciept', (reciept) => {
             console.log(reciept)
           })
           console.log(approve)
           /*
-          ;
+          /*
 
           let isapproved = await contract.methods.isApprovedForAll(from, to).call();
           console.log(isapproved)
@@ -136,7 +143,6 @@ class ShowTicket extends Component {
         await this.loadWeb3();
         await this.getTicketsofOwner();
       }
-
     render() {
         return (
             <div>
@@ -144,7 +150,6 @@ class ShowTicket extends Component {
                 Your tickets:
             </h5>
             <div className="row text-center">
-            
                 <div style={{border: '30px solid white'}}></div>
                  {/* Show all Tickets available to purchase */}
                 {this.state.tickets.map((ticket) => {
