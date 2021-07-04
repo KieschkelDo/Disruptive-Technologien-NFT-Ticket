@@ -104,7 +104,6 @@ class CreateTicket extends Component {
                       type='text'
                       className='form-control mb-1'
                       placeholder='Name'
-                      value='Snoop Dogg'
                       ref={(input) => { this.name = input }}
                     />
                     <input
