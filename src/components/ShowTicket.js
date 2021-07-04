@@ -83,7 +83,7 @@ class ShowTicket extends Component {
             const ticket = await contract.methods.getTicketMetadata(tokenid).call()
             let ownedticketobj = new Object({name: ticket.name, artist: ticket.artist, location: ticket.location, price: ticket.price, seat: ticket.seat,date: ticket.date, ipfs_hash: ticket.ipfs_hash,})
             this.setState({
-              tickets: [...this.state.ownedtickets, ownedticketobj]
+              ownedtickets: [...this.state.ownedtickets, ownedticketobj]
             })
             }
           }
@@ -144,6 +144,7 @@ class ShowTicket extends Component {
         await this.getTicketsofOwner();
       }
     render() {
+
         return (
             <div>
             <h5 style={{marginTop:"50px"}}>
@@ -152,7 +153,7 @@ class ShowTicket extends Component {
             <div className="row text-center">
                 <div style={{border: '30px solid white'}}></div>
                  {/* Show all Tickets available to purchase */}
-                {this.state.tickets.map((ticket) => {
+                {this.state.ownedtickets.map((ticket) => {
                     return (
                         <div className="col-md-3 mb-3">
                             <div style={{border: '30px solid white'}}></div>
